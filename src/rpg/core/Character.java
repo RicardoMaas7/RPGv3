@@ -46,6 +46,9 @@ public abstract class Character implements Healable, Serializable {
     protected int maxMana;
     protected int currentMana;
     
+    // Economía
+    protected int gold;
+    
     // Sistema de experiencia
     protected int currentExp = 0;
     protected int expToNextLevel = 100; // XP necesaria para nivel 2
@@ -77,6 +80,8 @@ public abstract class Character implements Healable, Serializable {
         // ¡Importante! Inicializamos los objetos de composición
         this.inventory = new Inventory();
         this.equipment = new Equipment();
+        
+        this.gold = GameConstants.STARTING_GOLD;
     }
 
     // --- Métodos Abstractos (Para los hijos) ---
@@ -238,7 +243,20 @@ public abstract class Character implements Healable, Serializable {
     public int getAttack() { return this.baseAttack + this.attackBonus; }
     public int getDefense() { return this.defenseBonus; }
     public int getMagic() { return this.baseMagic + this.magicBonus; }
-    public int getGold() { return 0; } // Por ahora retorna 0, puedes agregar un campo 'gold' después
+    public int getGold() { return this.gold; }
+    
+    public void addGold(int amount) {
+        this.gold += amount;
+        GameEventManager.getInstance().notify(EventType.NEW_MESSAGE_LOGGED, "Has obtenido " + amount + " de oro.");
+    }
+    
+    public boolean removeGold(int amount) {
+        if (this.gold >= amount) {
+            this.gold -= amount;
+            return true;
+        }
+        return false;
+    }
     
     // --- Sistema de Experiencia ---
     

@@ -11,22 +11,6 @@ import java.util.List;
 
 /**
  * Fachada principal del juego - Patrones Facade + Singleton (GoF).
- * 
- * PROPÓSITO:
- * - Simplifica la interacción de la GUI con el backend complejo
- * - Coordina subsistemas: combate, inventario, quests, persistencia
- * - Garantiza una única instancia del motor del juego (Singleton)
- * - Desacopla la presentación de la lógica de negocio
- * 
- * ARQUITECTURA:
- * GUI → GameFacade → [CharacterFactory, BattleManager, QuestManager, SaveManager]
- * 
- * RESPONSABILIDADES:
- * - Creación y gestión del personaje jugador
- * - Inicio y control de batallas
- * - Gestión de misiones
- * - Persistencia (guardar/cargar)
- * - Notificación de eventos a la GUI
  */
 public class GameFacade {
 
@@ -56,7 +40,6 @@ public class GameFacade {
         this.enemyFactory = new EnemyFactory();
         this.questManager = new QuestManager();
         this.saveManager = new SaveManager();
-        // Aquí también inicializarías QuestService, InventoryService, etc.
     }
 
     // --- API Pública (Métodos que la GUI llamará) ---
@@ -69,7 +52,8 @@ public class GameFacade {
         this.currentCharacterType = type;
         log("Un nuevo héroe, " + player.getName() + ", ha aparecido!");
     }
- // --- ¡NUEVA API DE MISIONES PARA LA GUI! ---
+    
+    // --- API DE MISIONES ---
 
     public void startQuest(String questId) {
         questManager.startQuest(questId);
@@ -118,9 +102,9 @@ public class GameFacade {
         System.out.println("FACADE: " + message);
         GameEventManager.getInstance().notify(EventType.NEW_MESSAGE_LOGGED, message);
     }
+    
     /**
      * Guarda el estado actual del jugador en un archivo.
-     * @return true si se guardó exitosamente
      */
     public boolean saveGame(String filename) {
         if (player != null && currentCharacterType != null) {
@@ -145,7 +129,6 @@ public class GameFacade {
     
     /**
      * Carga el estado del jugador desde un archivo.
-     * @return true si se cargó exitosamente
      */
     public boolean loadGame(String filename) {
         rpg.persistence.GameState gameState = saveManager.loadGame(filename);
@@ -208,6 +191,10 @@ public class GameFacade {
                 
                 String message = player.getName() + " ataca a " + enemy.getName() + " por " + damage + " de daño!";
                 GameEventManager.getInstance().notify(EventType.NEW_MESSAGE_LOGGED, message);
+                
+                // Verificar victoria inmediatamente
+                currentBattle.checkVictory();
+                
                 return message;
             }
         }
@@ -224,6 +211,10 @@ public class GameFacade {
                 
                 String message = player.getName() + " usa [Habilidad Especial] contra " + enemy.getName() + " por " + damage + " de daño!";
                 GameEventManager.getInstance().notify(EventType.NEW_MESSAGE_LOGGED, message);
+                
+                // Verificar victoria inmediatamente
+                currentBattle.checkVictory();
+                
                 return message;
             }
         }

@@ -7,9 +7,11 @@ import rpg.core.Character;
 import rpg.core.GameFacade;
 import rpg.inventory.Item;
 import rpg.inventory.Equippable;
+import rpg.ui.theme.UITheme;
+import rpg.ui.components.ModernButton;
 
 /**
- * Panel de inventario que muestra items del jugador.
+ * Panel de inventario mejorado con UI moderna.
  */
 public class InventoryPanel extends JPanel {
     private static final long serialVersionUID = 1L;
@@ -18,14 +20,14 @@ public class InventoryPanel extends JPanel {
     private DefaultTableModel tableModel;
     
     public InventoryPanel() {
-        setLayout(new BorderLayout(10, 10));
-        setBackground(new Color(245, 245, 245));
-        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        setLayout(new BorderLayout(15, 15));
+        setBackground(UITheme.SECONDARY_DARK);
+        setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
         
         // Título
         JLabel titleLabel = new JLabel("INVENTARIO");
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 28));
-        titleLabel.setForeground(new Color(44, 62, 80));
+        titleLabel.setFont(UITheme.FONT_TITLE);
+        titleLabel.setForeground(UITheme.ACCENT_BLUE);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
         
         // Tabla de items
@@ -38,27 +40,36 @@ public class InventoryPanel extends JPanel {
         };
         
         itemTable = new JTable(tableModel);
-        itemTable.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        itemTable.setRowHeight(35);
+        itemTable.setFont(UITheme.FONT_BODY);
+        itemTable.setRowHeight(40);
         itemTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        itemTable.setSelectionBackground(new Color(52, 152, 219));
-        itemTable.setSelectionForeground(Color.WHITE);
-        itemTable.setGridColor(new Color(189, 195, 199));
-        itemTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
+        itemTable.setSelectionBackground(UITheme.ACCENT_BLUE);
+        itemTable.setSelectionForeground(UITheme.TEXT_PRIMARY);
+        itemTable.setBackground(UITheme.PRIMARY_DARK);
+        itemTable.setForeground(UITheme.TEXT_PRIMARY);
+        itemTable.setGridColor(new Color(60, 63, 65));
+        itemTable.setFillsViewportHeight(true);
+        itemTable.setOpaque(true);
+        
+        // Header de la tabla
+        itemTable.getTableHeader().setFont(UITheme.FONT_BODY_BOLD);
         itemTable.getTableHeader().setBackground(new Color(52, 73, 94));
-        itemTable.getTableHeader().setForeground(Color.WHITE);
+        itemTable.getTableHeader().setForeground(UITheme.TEXT_PRIMARY);
+        itemTable.getTableHeader().setBorder(BorderFactory.createEmptyBorder());
         
         JScrollPane scrollPane = new JScrollPane(itemTable);
-        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(189, 195, 199), 2));
+        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(60, 63, 65), 1));
+        scrollPane.getViewport().setBackground(UITheme.PRIMARY_DARK);
+        scrollPane.setBackground(UITheme.PRIMARY_DARK);
         
         // Panel de botones
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         buttonPanel.setOpaque(false);
         
-        JButton equipBtn = createActionButton("Equipar", new Color(41, 128, 185));
+        ModernButton equipBtn = new ModernButton("Equipar", UITheme.ACCENT_BLUE);
         equipBtn.addActionListener(e -> equipSelectedItem());
         
-        JButton useBtn = createActionButton("Usar", new Color(39, 174, 96));
+        ModernButton useBtn = new ModernButton("Usar", UITheme.ACCENT_GREEN);
         useBtn.addActionListener(e -> useSelectedItem());
         
         buttonPanel.add(equipBtn);
@@ -98,7 +109,7 @@ public class InventoryPanel extends JPanel {
         Item item = player.getInventory().getItems().get(selectedRow);
         
         if (item instanceof Equippable) {
-            player.getInventory().equipItem((Equippable) item);
+            player.equip((Equippable) item);
             JOptionPane.showMessageDialog(this, "Item equipado: " + item.getName());
             refresh();
         } else {
@@ -119,42 +130,5 @@ public class InventoryPanel extends JPanel {
         item.use(player);
         JOptionPane.showMessageDialog(this, "Usaste: " + item.getName());
         refresh();
-    }
-    
-    private JButton createActionButton(String text, Color color) {
-        JButton button = new JButton(text);
-        
-        // Configuración básica del botón
-        button.setUI(new javax.swing.plaf.basic.BasicButtonUI());
-        
-        button.setFont(new Font("Segoe UI", Font.BOLD, 15));
-        button.setPreferredSize(new Dimension(140, 45));
-        button.setBackground(color);
-        button.setForeground(Color.WHITE);
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        button.setOpaque(true);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        Color originalColor = color;
-        Color hoverColor = color.brighter();
-        Color pressedColor = color.darker();
-        
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(hoverColor);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(originalColor);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                button.setBackground(pressedColor);
-            }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                button.setBackground(hoverColor);
-            }
-        });
-        
-        return button;
     }
 }

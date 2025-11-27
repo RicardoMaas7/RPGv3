@@ -155,4 +155,9 @@ public final class GameConstants {
     
     /** Color de oro */
     public static final int[] COLOR_GOLD = {255, 215, 0};
+    
+    // ==================== ECONOMÍA ====================
+    
+    /** Oro inicial del jugador */
+    public static final int STARTING_GOLD = 0;
 }

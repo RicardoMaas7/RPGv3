@@ -332,18 +332,6 @@ Peligroso (15%)
 
 ### Alta Prioridad
 1. ⏳ **Diagramas UML** - Visualizar arquitectura
-2. ⏳ **JAR Ejecutable** - Empaquetado final
-
-### Media Prioridad
-3. ⏳ **Tests Unitarios** - JUnit para componentes
-4. ⏳ **Más Misiones** - Ampliar contenido
-5. ⏳ **Sistema de Oro** - Economía del juego
-
-### Baja Prioridad
-6. ⏳ **Crafting** - Combinar items
-7. ⏳ **Achievements** - Sistema de logros
-8. ⏳ **Sonido** - Efectos de audio
-
 ---
 
 ## 📝 **Notas de Versión**

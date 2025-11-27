@@ -40,7 +40,7 @@ public class Slime extends Enemy {
         loot.setGoldReward(5, 10); // 5-15 oro
         
         // Items (baja probabilidad)
-        loot.addDrop(new HealthPotion(), 0.15); // 15% de chance
+        loot.addDrop(new HealthPotion(), 0.50); // 50% de chance (AUMENTADO)
         
         this.setLootTable(loot);
     }

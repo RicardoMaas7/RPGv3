@@ -37,8 +37,8 @@ public class Goblin extends Enemy {
         loot.setGoldReward(20, 30); // 20-50 oro
         
         // Items
-        loot.addDrop(new HealthPotion(), 0.25); // 25% chance
-        loot.addDrop(new Sword("Daga Oxidada", "Arma goblin oxidada pero afilada", 6), 0.08); // 8% chance
+        loot.addDrop(new HealthPotion(), 0.60); // 60% chance (AUMENTADO)
+        loot.addDrop(new Sword("Daga Oxidada", "Arma goblin oxidada pero afilada", 6), 0.30); // 30% chance (AUMENTADO)
         
         this.setLootTable(loot);
     }

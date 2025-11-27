@@ -1,4 +1,3 @@
-// Inventory.java
 package rpg.inventory;
 
 import java.io.Serializable;
@@ -55,11 +54,5 @@ public class Inventory implements Serializable {
     // Getter para Equipment
     public Equipment getEquipment() {
         return this.equipment;
-    }
-    
-    // Método para equipar items fácilmente
-    public void equipItem(Equippable item) {
-        // Este método será llamado desde Character
-        // La lógica real está en Equipment.equip()
     }
 }

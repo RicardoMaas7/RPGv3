@@ -11,28 +11,6 @@ import java.util.ArrayList;
 
 /**
  * Gestor del sistema de combate por turnos.
- * 
- * RESPONSABILIDADES:
- * - Coordina el flujo de batalla entre jugador y enemigos
- * - Alterna turnos entre ambos bandos
- * - Detecta condiciones de victoria/derrota
- * - Otorga recompensas (XP) al finalizar
- * - Notifica eventos de combate a la GUI
- * 
- * COMPATIBILIDAD:
- * - Funciona con enemigos individuales (Enemy)
- * - Funciona con grupos de enemigos (EnemyGroup) usando patrón Composite
- * - Integrado con sistema de IA enemiga (EnemyAI)
- * 
- * FLUJO DE BATALLA:
- * 1. startBattle() → inicia el combate
- * 2. playerTurn() → jugador ataca
- * 3. enemyTurn() → enemigos contraatacan
- * 4. Repite hasta victoria o derrota
- * 5. Otorga XP si gana el jugador
- * 
- * NOTA: En la GUI, los turnos serán controlados por botones del usuario,
- * no por un loop automático como en la versión de consola.
  */
 public class BattleManager {
 
@@ -75,6 +53,14 @@ public class BattleManager {
         logMessage(player.getName() + " ataca!");
         player.attack(enemies); // El jugador ataca al grupo
 
+        checkVictory();
+    }
+
+    /**
+     * Verifica si el jugador ha ganado la batalla y otorga recompensas.
+     * @return true si la batalla terminó con victoria, false en caso contrario
+     */
+    public boolean checkVictory() {
         if (!enemies.isAlive()) {
             logMessage("¡El jugador ha ganado la batalla!");
             
@@ -110,6 +96,7 @@ public class BattleManager {
             }
             
             if (totalGold > 0) {
+                player.addGold(totalGold);
                 logMessage("¡Conseguiste " + totalGold + " monedas de oro!");
             }
             
@@ -124,7 +111,9 @@ public class BattleManager {
             
             GameEventManager.getInstance().notify(EventType.ENEMY_DEFEATED, enemies);
             isBattleOver = true;
+            return true;
         }
+        return false;
     }
 
     // Lógica para el turno del enemigo
